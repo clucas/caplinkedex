@@ -1,0 +1,11 @@
+default: &default
+  heroku_host: cherry-sundae-68173.herokuapp.com
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default

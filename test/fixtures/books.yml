@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  author: MyString
+  publisher: MyString
+  published_on: MyString
+  unit_cost: 1.5
+  category: 
+  currency: MyString
+
+two:
+  title: MyString
+  author: MyString
+  publisher: MyString
+  published_on: MyString
+  unit_cost: 1.5
+  category: 
+  currency: MyString

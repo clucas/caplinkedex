@@ -1,0 +1,46 @@
+version: '3'
+services:
+  db:
+    image: postgres:latest
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
+    ports:
+      - "3432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+  web:
+    build: .
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - .:/caplinkedex
+    ports:
+      - "3000:3000"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      BONSAI_URL: http://elasticsearch:9200
+    depends_on:
+      - db
+      - elasticsearch
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.12.0
+    hostname: elasticsearch
+    container_name: es01
+    environment:
+      - node.name=es01
+      - cluster.name=es-docker-cluster
+      - cluster.initial_master_nodes=es01
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - BONSAI_URL=http://elasticsearch:9200
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./tmp/data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
